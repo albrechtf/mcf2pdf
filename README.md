@@ -11,10 +11,8 @@ Fotobuch or My CEWE Photobook software (in short, MCF software) to PDF files.
 These files then can be used to have a quick and rough impression on how the 
 photobook is going to look after printing.
 
---------------------------------------------------------------------------------
-Calendars and anything else than BOOKS are NOT (yet) supported by this software!
-(Do not ask me WHEN they will be supported - you will be ignored)
---------------------------------------------------------------------------------
+**Calendars and anything else than BOOKS are NOT (yet) supported by this software!**
+**(Do not ask me WHEN they will be supported - you will be ignored)**
 
 The generated PDFs are NOT, and will never be, a 100% representation of the
 designed photobook. Also, they do NOT include bleed margins (especially not for 
