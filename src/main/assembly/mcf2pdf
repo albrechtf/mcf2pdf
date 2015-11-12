@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Startup Script for mcf2pdf program.
+#
+
+# Adjust these variables to your local installation of the MCF software
+MCF_INSTALL_DIR=
+
+# This is the default value of the software
+MCF_TEMP_DIR=~/.mcf
+
+#
+# Java Options. You can adjust the amount of reserved memory (RAM) here.
+#  
+MCF2PDF_JAVA_OPTS="-Xms64M -Xmx128M"
+
+
+# check if this file has to be adjusted!
+if [ "$MCF_INSTALL_DIR" == "" ]
+then
+  echo "The installation directory of the MCF software has not been set! Please edit the file $0 with a text editor first."
+  exit 3
+fi
+
+java $MCF2PDF_JAVA_OPTS -classpath ${classpath}:mcf2pdf-${project.version}.jar net.sf.mcf2pdf.Main -i "$MCF_INSTALL_DIR" -t "$MCF_TEMP_DIR" "$@"
