@@ -1,36 +1,20 @@
-mcf2pdf Converter for Mein CEWE Fotobuch (My CEWE Photobook) files to PDF
+# mcf2pdf Converter for Mein CEWE Fotobuch (My CEWE Photobook) files to PDF
 
-Version ${project.version}
+Latest Release: Version 0.2.1
 
-Author: Florian Albrecht (cwflo AT users DOT sourceforge DOT net)
+Author: Florian Albrecht
 
-Please read this file carefully; if you send me any e-mail which indicates that
-you did not, you will be ignored.
-
-PLEASE USE THE SOURCEFORGE SUPPORT FORUM OR BUGTRACKER BEFORE SENDING ME
-AN E-MAIL!
-
--------------------------------------------------------------------------------
-
-1. What is mcf2pdf? What not?
-2. Installation and configuration
-3. Converting files
-4. Troubleshooting
-5. Legal Stuff (Disclaimer)
-
--------------------------------------------------------------------------------
-
-1. What is mcf2pdf? What not?
+## What is mcf2pdf? What not?
 
 This program enables you to convert photobooks created with the Mein CEWE
 Fotobuch or My CEWE Photobook software (in short, MCF software) to PDF files.
 These files then can be used to have a quick and rough impression on how the 
 photobook is going to look after printing.
 
-================================================================================
+--------------------------------------------------------------------------------
 Calendars and anything else than BOOKS are NOT (yet) supported by this software!
 (Do not ask me WHEN they will be supported - you will be ignored)
-================================================================================
+--------------------------------------------------------------------------------
 
 The generated PDFs are NOT, and will never be, a 100% representation of the
 designed photobook. Also, they do NOT include bleed margins (especially not for 
@@ -44,7 +28,7 @@ one single photobook. For this, there will be many features of MCF files not yet
 supported by this software. This can result in empty or strange looking PDFs,
 or even in program crashes. Notice that this program is in BETA stage and is
 not guaranteed to work for ANY of your MCF files. However, if you notice any
-strange output, feel free to issue a ticket in the SourceForge bugtracker. 
+strange output, feel free to issue a ticket in the GitHub bugtracker. 
 If possible, include a screenshot of the MCF software which shows how the page 
 should look, and then a screenshot of the PDF how it looks after conversion. 
 Also, including the whole .mcf file would help (don't panic, the .mcf files do 
@@ -55,9 +39,7 @@ If you are interested in extending the software, feel free to download the code
 and start developing! Most important classes are commented. If you send me your 
 enhancements by e-mail, I can include them in the software.
 
--------------------------------------------------------------------------------
-
-2. Installation and configuration
+## Installation and configuration
 
 Installation is quite easy. Just extract the downloaded archive 
 (mcf2pdf-x.y.z-bin-windows.zip or mcf2pdf-x.y.z-bin-linux.tar.gz), as you 
@@ -94,9 +76,7 @@ there.
   
 When finished, save the startup script.
 
--------------------------------------------------------------------------------
-
-3. Converting files
+## Converting files
 
 After correct configuration (see above), conversion of MCF files now is rather
 simple. Just open a command line (Windows: Win+R, then enter "cmd"), change to
@@ -121,9 +101,7 @@ a long time.
 For advanced settings, enter "mcf2pdf -h". This will give you information on
 how to adjust the output DPI setting and much more. 
 
--------------------------------------------------------------------------------
-
-4. Troubleshooting
+## Troubleshooting
 
 As stated above, mcf2pdf is BETA and does not yet implement very much of the
 MCF software features. Please refer to chapter 1 on how to file a "bug".
@@ -137,9 +115,7 @@ page rendering. This is mostly due to a too high DPI setting. Well, as you seem
 to be an expert to use this option, you won't have any problems to adjust the
 startup script (see chapter 2) to set higher memory levels for Java, will you?
 
--------------------------------------------------------------------------------
-
-5. Legal Stuff (Disclaimer)
+## Legal Stuff (Disclaimer)
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
