@@ -13,9 +13,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git@github.com:albrechtf/mcf2pdf.git</connection>
-		<url>scm:git:git@github.com:albrechtf/mcf2pdf.git</url>
-		<developerConnection>scm:git:git@github.com:albrechtf/mcf2pdf.git</developerConnection>
+		<connection>scm:git:https://github.com/albrechtf/mcf2pdf.git</connection>
+		<url>https://github.com/albrechtf/mcf2pdf.git</url>
+		<developerConnection>scm:git:https://github.com/albrechtf/mcf2pdf.git</developerConnection>
 	</scm>
 
 	<developers>
