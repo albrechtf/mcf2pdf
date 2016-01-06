@@ -104,7 +104,9 @@ public final class ImageUtil {
 
 				float x = ed.getFloat(ExifDirectory.TAG_X_RESOLUTION);
 				float y = ed.getFloat(ExifDirectory.TAG_Y_RESOLUTION);
-				return new float[] { x, y };
+				// Use always the default resolution, otherwise the image will be scaled up or down.
+				return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
+				//return new float[] { x, y };
 			}
 
 			return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
