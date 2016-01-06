@@ -33,6 +33,7 @@ public class PageText implements PageDrawable {
 	private static final Pattern PATTERN_PARA_ALIGN = Pattern.compile("(?:\\s|^)align=\"([^\"]+)\"");
 	private static final Pattern PATTERN_PARA_STYLE = Pattern.compile("(?:\\s|^)style=\"([^\"]+)\"");
 	private static final Pattern PATTERN_HTML_TEXT_SPAN = Pattern.compile("<span\\s+style=\"([^\"]+)\"[^>]*>([^<]+)</span>");
+	private static final Pattern PATTERN_BODY_STYLE = Pattern.compile("<body\\s([^>]*)style=\"([^\"]+)\">");
 
 	private McfText text;
 
@@ -61,13 +62,28 @@ public class PageText implements PageDrawable {
 	private void parseText() {
 		// parse text out of content
 		String htmlText = text.getHtmlContent();
+		if (htmlText.contains("Mainau")){
+			String text="ach so";
+		}
 
 		paras = new Vector<FormattedTextParagraph>();
 
+		//body contains style-information, which is parsed here
+		Matcher mb = PATTERN_BODY_STYLE.matcher(htmlText);
+		String bodystyle = "";
+		if (mb.find()){
+			Matcher mbs = PATTERN_PARA_STYLE.matcher(mb.group());
+			if (mbs.find())
+				bodystyle = mbs.group(1);
+		}
+		
+		
 		Matcher mp = PATTERN_HTML_TEXT_PARA.matcher(htmlText);
 		int curStart = 0;
 		while (mp.find(curStart)) {
 			FormattedTextParagraph para = new FormattedTextParagraph();
+			if (bodystyle!="")
+				para.addText(createFormattedText("", bodystyle));
 			String paraAttrs = mp.group(1);
 			Matcher malign = PATTERN_PARA_ALIGN.matcher(paraAttrs);
 			if (malign.find()) {
@@ -195,18 +211,19 @@ public class PageText implements PageDrawable {
 
 		return (int)drawPosY;
 	}
-
+	
+	private boolean bold = false;
+	private boolean italic = false;
+	private boolean underline = false;
+	private float fontSize = 12.0f;
+	private String fontFamily = "Arial";
+	private Color textColor = Color.black;
 
 	private FormattedText createFormattedText(String text, String css) {
 		// parse attributes out of css
 		String[] avPairs = css.split(";");
 
-		boolean bold = false;
-		boolean italic = false;
-		boolean underline = false;
-		float fontSize = 12.0f;
-		String fontFamily = "Arial";
-		Color textColor = Color.black;
+
 
 		for (String avp : avPairs) {
 			avp = avp.trim();
