@@ -30,6 +30,7 @@ public abstract class McfProductCatalogue {
 	
 	public abstract boolean isEmpty();
 	
+	/*
 	public static McfProductCatalogue read(InputStream in) throws IOException, SAXException {
 		Digester digester = new Digester();
 		digester.addObjectCreate("fotobookdefinitions", McfProductCatalogueImpl.class);
@@ -43,7 +44,20 @@ public abstract class McfProductCatalogue {
 		
 		return digester.parse(in);
 	}
-	
+	*/
+	public static McfProductCatalogue read(InputStream in) throws IOException, SAXException {
+		Digester digester = new Digester();
+		digester.addObjectCreate("description", McfProductCatalogueImpl.class);
+		digester.addObjectCreate("description/product", McfAlbumTypeImpl.class);
+		DigesterUtil.addSetProperties(digester, "description/product", getAlbumSpecialAttributes());
+		DigesterUtil.addSetProperties(digester, "description/product/usablesize", getUsableSizeAttributes());
+		digester.addCallMethod("description/product/spines/spine", "addSpine", 2, new String[] { Integer.class.getName(), Integer.class.getName() });
+		digester.addCallParam("description/product/spines/spine", 0, "pages");
+		digester.addCallParam("description/product/spines/spine", 1, "width");
+		digester.addSetNext("description/product", "addAlbumType");
+		
+		return digester.parse(in);
+	}
 	private static List<String[]> getAlbumSpecialAttributes() {
 		List<String[]> result = new Vector<String[]>();
 		result.add(new String[] { "safetymargin", "safetyMargin" });

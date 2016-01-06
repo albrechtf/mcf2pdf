@@ -89,7 +89,7 @@ public class Mcf2FoConverter {
 		this.tempImageDir = tempImageDir;
 
 		// get all products - scan ALL XML files in Resources for fotobookdefinitions
-		File resourcesDir = new File(mcfInstallDir, "Resources");
+		File resourcesDir = new File(mcfInstallDir, "Resources/products");
 		if (!resourcesDir.isDirectory()) {
 			throw new IOException("MCF Resources Directory " + resourcesDir.getAbsolutePath() + " does not exist");
 		}
