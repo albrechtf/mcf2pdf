@@ -34,6 +34,7 @@ public class PageText implements PageDrawable {
 	private static final Pattern PATTERN_PARA_STYLE = Pattern.compile("(?:\\s|^)style=\"([^\"]+)\"");
 	private static final Pattern PATTERN_HTML_TEXT_SPAN = Pattern.compile("<span\\s+style=\"([^\"]+)\"[^>]*>([^<]+)</span>");
 	private static final Pattern PATTERN_BODY_STYLE = Pattern.compile("<body\\s([^>]*)style=\"([^\"]+)\">");
+	private static final Pattern PATTERN_HTML_TEXT = Pattern.compile("([^<]\\w+[^/> ])");
 
 	private McfText text;
 
@@ -111,6 +112,16 @@ public class PageText implements PageDrawable {
 			}
 			curStart = mp.end();
 
+			//Some paragraphs have no <span> tags
+			if (curSpanStart == 0){
+				Matcher mt = PATTERN_HTML_TEXT.matcher(paraContent);
+				int curTextStart = 0;
+				while (mt.find(curTextStart)){
+					para.addText(createFormattedText(mt.group(), ""));
+					curTextStart = mt.end();
+				}
+			}
+			
 			paras.add(para);
 		}
 	}
