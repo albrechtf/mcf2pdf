@@ -63,9 +63,6 @@ public class PageText implements PageDrawable {
 	private void parseText() {
 		// parse text out of content
 		String htmlText = text.getHtmlContent();
-		if (htmlText.contains("Mainau")){
-			String text="ach so";
-		}
 
 		paras = new Vector<FormattedTextParagraph>();
 
