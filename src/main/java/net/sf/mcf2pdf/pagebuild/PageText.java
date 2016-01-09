@@ -68,11 +68,10 @@ public class PageText implements PageDrawable {
 
 		//body contains style-information, which is parsed here
 		Matcher mb = PATTERN_BODY_STYLE.matcher(htmlText);
-		String bodystyle = "";
 		if (mb.find()){
 			Matcher mbs = PATTERN_PARA_STYLE.matcher(mb.group());
 			if (mbs.find())
-				bodystyle = mbs.group(1);
+				setBodyStyle(mbs.group(1));
 		}
 		
 		
@@ -80,8 +79,6 @@ public class PageText implements PageDrawable {
 		int curStart = 0;
 		while (mp.find(curStart)) {
 			FormattedTextParagraph para = new FormattedTextParagraph();
-			if (bodystyle!="")
-				para.addText(createFormattedText("", bodystyle));
 			String paraAttrs = mp.group(1);
 			Matcher malign = PATTERN_PARA_ALIGN.matcher(paraAttrs);
 			if (malign.find()) {
@@ -98,6 +95,9 @@ public class PageText implements PageDrawable {
 			Matcher mstyle = PATTERN_PARA_STYLE.matcher(paraAttrs);
 			if (mstyle.find()) {
 				para.addText(createFormattedText("", mstyle.group(1)));
+				// extract margins
+				// ToDo: use margin information
+				para.setMargin(mstyle.group(1));
 			}
 
 			String paraContent = mp.group(2);
@@ -220,18 +220,24 @@ public class PageText implements PageDrawable {
 		return (int)drawPosY;
 	}
 	
-	private boolean bold = false;
-	private boolean italic = false;
-	private boolean underline = false;
-	private float fontSize = 12.0f;
-	private String fontFamily = "Arial";
-	private Color textColor = Color.black;
+	//<body> style
+	private boolean BODYSTYLE_bold = false;
+	private boolean BODYSTYLE_italic = false;
+	private boolean BODYSTYLE_underline = false;
+	private float BODYSTYLE_fontSize = 12.0f;
+	private String BODYSTYLE_fontFamily = "Arial";
+	private Color BODYSTYLE_textColor = Color.black;
 
 	private FormattedText createFormattedText(String text, String css) {
 		// parse attributes out of css
 		String[] avPairs = css.split(";");
 
-
+		boolean bold = BODYSTYLE_bold;
+		boolean italic = BODYSTYLE_italic;
+		boolean underline = BODYSTYLE_underline;
+		float fontSize = BODYSTYLE_fontSize;
+		String fontFamily = BODYSTYLE_fontFamily;
+		Color textColor = BODYSTYLE_textColor;
 
 		for (String avp : avPairs) {
 			avp = avp.trim();
@@ -245,7 +251,11 @@ public class PageText implements PageDrawable {
 
 			try {
 				if ("font-family".equalsIgnoreCase(a))
+				{
 					fontFamily = v.replace("'", "");
+					if (fontFamily.contains(","))
+						fontFamily = fontFamily.substring(0, fontFamily.indexOf(","));
+				}
 				if ("font-size".equalsIgnoreCase(a) && v.matches("[0-9]+pt"))
 					fontSize = Float.valueOf(v.substring(0, v.indexOf("pt"))).floatValue();
 				if ("font-weight".equalsIgnoreCase(a))
@@ -269,6 +279,45 @@ public class PageText implements PageDrawable {
 		text = text.replace("&lt;", "<");
 		text = text.replace("&gt;", ">");
 		return new FormattedText(text, bold, italic, underline, textColor, fontFamily, fontSize);
+	}
+	
+	private void setBodyStyle(String css) {
+		// parse attributes out of css
+		String[] avPairs = css.split(";");
+
+		for (String avp : avPairs) {
+			avp = avp.trim();
+			if (!avp.contains(":"))
+				continue;
+			String[] av = avp.split(":");
+			if (av.length != 2)
+				continue;
+			String a = av[0].trim();
+			String v = av[1].trim();
+
+			try {
+				if ("font-family".equalsIgnoreCase(a))
+				{
+					BODYSTYLE_fontFamily = v.replace("'", "");
+					if (BODYSTYLE_fontFamily.contains(","))
+						BODYSTYLE_fontFamily = BODYSTYLE_fontFamily.substring(0, BODYSTYLE_fontFamily.indexOf(","));
+				}
+				if ("font-size".equalsIgnoreCase(a) && v.matches("[0-9]+pt"))
+					BODYSTYLE_fontSize = Float.valueOf(v.substring(0, v.indexOf("pt"))).floatValue();
+				if ("font-weight".equalsIgnoreCase(a))
+					BODYSTYLE_bold = Integer.valueOf(v).intValue() > 400;
+				if ("text-decoration".equalsIgnoreCase(a))
+					BODYSTYLE_underline = "underline".equals(v);
+				if ("color".equalsIgnoreCase(a))
+					BODYSTYLE_textColor = Color.decode(v);
+				if ("font-style".equalsIgnoreCase(a))
+					BODYSTYLE_italic = "italic".equals(v);
+			}
+			catch (Exception e) {
+				// ignore invalid attributes
+			}
+		}
+
 	}
 
 
