@@ -1,6 +1,6 @@
 # mcf2pdf Converter for Mein CEWE Fotobuch (My CEWE Photobook) files to PDF
 
-Latest Release: Version 0.2.1
+Latest Release: Version 0.3.0
 
 Author: Florian Albrecht
 
@@ -21,35 +21,33 @@ model used for professional printings. Therefore, you should not use the
 generated PDFs for any "real" print jobs - you will be really disappointed about 
 the results.
 
-I just started development of this program, and personally, I just needed it for
-one single photobook. For this, there will be many features of MCF files not yet
-supported by this software. This can result in empty or strange looking PDFs,
-or even in program crashes. Notice that this program is in BETA stage and is
-not guaranteed to work for ANY of your MCF files. However, if you notice any
-strange output, feel free to issue a ticket in the GitHub bugtracker. 
-If possible, include a screenshot of the MCF software which shows how the page 
-should look, and then a screenshot of the PDF how it looks after conversion. 
-Also, including the whole .mcf file would help (don't panic, the .mcf files do 
-not include any pictures by theirselves, but TEXT inserted into the photobook 
-can be seen in the .mcf file).
+I just developed this program for personal use. So, there will be many features 
+of MCF files not yet supported by this software. This can result in empty or 
+strange looking PDFs, or even in program crashes. Notice that this program is 
+in BETA stage and is not guaranteed to work for ANY of your MCF files. However, 
+if you notice any strange output, feel free to issue a ticket in the GitHub 
+bugtracker. If possible, include a screenshot of the MCF software which shows how 
+the page should look, and then a screenshot of the PDF how it looks after 
+conversion. Also, including the whole .mcf file would help (don't panic, the .mcf 
+files do not include any pictures by theirselves, but TEXT inserted into the 
+photobook can be seen in the .mcf file).
 
-If you are interested in extending the software, feel free to download the code 
-and start developing! Most important classes are commented. If you send me your 
-enhancements by e-mail, I can include them in the software.
+If you are interested in extending the software, feel free to fork the project 
+and start developing! Most important classes are commented. If you create Pull
+Requests in the main project, I can review them and include them in the software.
 
 ## Installation and configuration
 
-Installation is quite easy. Just extract the downloaded archive 
-(mcf2pdf-x.y.z-bin-windows.zip or mcf2pdf-x.y.z-bin-linux.tar.gz), as you 
-will likely already have done as you are reading this file.
+Installation is quite easy. Just download and extract the archive 
+(mcf2pdf-x.y.z-bin-windows.zip or mcf2pdf-x.y.z-bin-linux.tar.gz).
 
-To run mcf2pdf, you will have to adjust the startup script by hand, as the 
+To run mcf2pdf, you will have to **adjust the startup script by hand**, as the 
 program cannot yet automatically determine where the MCF software is installed.
 
 Some notes about the structure of the MCF software first: The installation 
 locations of the software consist of two components. One component is the 
-"real" installation directory, like C:\Program Files\Mein CEWE Fotobuch under 
-Windows, or perhaps /home/myuser/cewe-fotobuch under Linux. Here the binaries
+"real" installation directory, like `C:\Program Files\Mein CEWE Fotobuch` under 
+Windows, or perhaps `/home/myuser/cewe-fotobuch` under Linux. Here the binaries
 of the software are located as well as the shipped background images, fonts,
 cliparts etc. 
 The other component is the "temporary" directory of the MCF software which can
@@ -61,13 +59,13 @@ have to "tell" mcf2pdf about both. This is done by editing the startup script
 (mcf2pdf.bat under Windows, mcf2pdf under Linux) with any text editor you like
 (Windows: right-click the file and select "Edit"). 
 
-Look for the line starting with <SET> MCF_INSTALL_DIR= (SET only in the .bat 
+Look for the line starting with &lt;SET> MCF_INSTALL_DIR= (SET only in the .bat 
 version). After the =, insert the complete path to the "real" MCF software
 installation location, e.g. "C:\Program Files\Mein CEWE Fotobuch". Notice that
 you MUST include the path in double quotes if it contains spaces!!
 
-Next, look for the line starting with <SET> MCF_TEMP_DIR= (SET only in the .bat 
-version). The same, insert now the TEMPORARY location of the software. If 
+Next, look for the line starting with &lt;SET> MCF_TEMP_DIR= (SET only in the 
+.bat version). The same, insert now the TEMPORARY location of the software. If 
 unsure, startup the MCF software, open any file, select "Options", "Directories"
 (second item in the Options dialog), and copy the temporary directory listed 
 there.
@@ -79,10 +77,10 @@ When finished, save the startup script.
 After correct configuration (see above), conversion of MCF files now is rather
 simple. Just open a command line (Windows: Win+R, then enter "cmd"), change to
 the directory where you extracted the mcf2pdf program (if you do not know what
-this means, google for "cd change directory"), and type "mcf2pdf <my MCF file>
-<my new PDF file>". For example:
+this means, google for "cd change directory"), and type "mcf2pdf &lt;my MCF file>
+&lt;my new PDF file>". For example:
 
-mcf2pdf "C:\Documents and Settings\myuser\My Documents\USA 2011.mcf" output.pdf
+    mcf2pdf "C:\Documents and Settings\myuser\My Documents\USA 2011.mcf" output.pdf
 
 Notice the double quotes due to the spaces in the path to the MCF file!
 
@@ -90,7 +88,7 @@ If this seems to complicated, you can COPY the .mcf file AND the images folder
 of it (e.g. "USA 2011.mcf Files") to the directory where mcf2pdf is located, 
 and then just enter
 
-mcf2pdf "USA 2011.mcf" output.pdf
+    mcf2pdf "USA 2011.mcf" output.pdf
 
 The program will start converting the file and inform you when this is finished.
 Notice that the program is NOT optimized for speed in any way... It can take 

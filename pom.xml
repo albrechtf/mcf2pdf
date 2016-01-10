@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.florian-albrecht.tools</groupId>
 	<artifactId>mcf2pdf</artifactId>
-	<version>0.2.2-SNAPSHOT</version>
+	<version>0.3.0</version>
 	<name>mcf2pdf</name>
 	<description>mcf2pdf enables you to convert photobooks generated with the My CEWE Photobook software to PDF files for preview.</description>
 
@@ -15,12 +16,12 @@
 		<connection>scm:git:https://github.com/albrechtf/mcf2pdf.git</connection>
 		<url>https://github.com/albrechtf/mcf2pdf.git</url>
 		<developerConnection>scm:git:https://github.com/albrechtf/mcf2pdf.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<developers>
 		<developer>
-			<id>cwflo</id>
+			<id>albrechtf</id>
 			<name>Florian Albrecht</name>
 			<timezone>+1</timezone>
 		</developer>
@@ -135,7 +136,7 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
