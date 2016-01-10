@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.florian-albrecht.tools</groupId>
 	<artifactId>mcf2pdf</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<name>mcf2pdf</name>
 	<description>mcf2pdf enables you to convert photobooks generated with the My CEWE Photobook software to PDF files for preview.</description>
 
