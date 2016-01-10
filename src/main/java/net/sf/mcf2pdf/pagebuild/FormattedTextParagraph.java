@@ -18,12 +18,6 @@ public class FormattedTextParagraph {
 	
 	private Alignment alignment = Alignment.LEFT;
 	
-	private float marginLeft=0f;
-	private float marginRight=0f;
-	private float marginTop=0f;
-	private float marginBottom=0f;
-	
-	
 	private List<FormattedText> texts = new Vector<FormattedText>();
 	
 	public FormattedTextParagraph() {
@@ -132,39 +126,6 @@ public class FormattedTextParagraph {
 		return font;
 	}
 
-	public void setMargin(String css) {
-		// parse attributes out of css
-		// margins seem always to be 0.0 except in <table> attributes of cover pages 
-		String[] avPairs = css.split(";");
-
-		for (String avp : avPairs) {
-			avp = avp.trim();
-			if (!avp.contains(":"))
-				continue;
-			String[] av = avp.split(":");
-			if (av.length != 2)
-				continue;
-			String a = av[0].trim();
-			String v = av[1].trim();
-
-			try {
-				if ("margin-left".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginLeft = Float.valueOf(v.substring(0, v.indexOf("px"))).floatValue();
-				if ("margin-right".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginRight = Float.valueOf(v.substring(0, v.indexOf("px"))).floatValue();
-				if ("margin-top".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginTop = Float.valueOf(v.substring(0, v.indexOf("px"))).floatValue();
-				if ("margin-bottom".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginBottom = Float.valueOf(v.substring(0, v.indexOf("px"))).floatValue();
-			}
-			catch (Exception e) {
-				// ignore invalid attributes
-			}
-		}
-
-	}
-	
-	
 
 
 }

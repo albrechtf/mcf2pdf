@@ -95,9 +95,6 @@ public class PageText implements PageDrawable {
 			Matcher mstyle = PATTERN_PARA_STYLE.matcher(paraAttrs);
 			if (mstyle.find()) {
 				para.addText(createFormattedText("", mstyle.group(1)));
-				// extract margins
-				// ToDo: use margin information
-				para.setMargin(mstyle.group(1));
 			}
 
 			String paraContent = mp.group(2);
@@ -142,7 +139,9 @@ public class PageText implements PageDrawable {
 
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = img.createGraphics();
-		int curY = context.toPixel(text.getVerticalIndentMargin() / 10.0f);
+		// For correct position of Text curY must be 0.0 
+		//int curY = context.toPixel(text.getVerticalIndentMargin() / 10.0f);
+		int curY = 0;
 		int x = context.toPixel(text.getIndentMargin() / 10.0f);
 
 		// background color?
