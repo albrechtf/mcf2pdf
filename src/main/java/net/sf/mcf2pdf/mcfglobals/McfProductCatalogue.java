@@ -19,31 +19,54 @@ import net.sf.mcf2pdf.mcfglobals.impl.McfProductCatalogueImpl;
 import org.apache.commons.digester3.Digester;
 import org.xml.sax.SAXException;
 
-
-
 /**
  * TODO comment
  */
 public abstract class McfProductCatalogue {
-	
+
+	public static enum CatalogueVersion {
+		PRE_V6, V6;
+	}
+
 	public abstract McfAlbumType getAlbumType(String name);
-	
+
 	public abstract boolean isEmpty();
-	
-	public static McfProductCatalogue read(InputStream in) throws IOException, SAXException {
+
+	public static McfProductCatalogue read(InputStream in, CatalogueVersion version) throws IOException, SAXException {
+		if (version == CatalogueVersion.V6) {
+			return readV6(in);
+		}
+
+		// PRE_V6
 		Digester digester = new Digester();
 		digester.addObjectCreate("fotobookdefinitions", McfProductCatalogueImpl.class);
 		digester.addObjectCreate("fotobookdefinitions/album", McfAlbumTypeImpl.class);
 		DigesterUtil.addSetProperties(digester, "fotobookdefinitions/album", getAlbumSpecialAttributes());
 		DigesterUtil.addSetProperties(digester, "fotobookdefinitions/album/usablesize", getUsableSizeAttributes());
-		digester.addCallMethod("fotobookdefinitions/album/spines/spine", "addSpine", 2, new String[] { Integer.class.getName(), Integer.class.getName() });
+		digester.addCallMethod("fotobookdefinitions/album/spines/spine", "addSpine", 2,
+				new String[] { Integer.class.getName(), Integer.class.getName() });
 		digester.addCallParam("fotobookdefinitions/album/spines/spine", 0, "pages");
 		digester.addCallParam("fotobookdefinitions/album/spines/spine", 1, "width");
 		digester.addSetNext("fotobookdefinitions/album", "addAlbumType");
-		
+
 		return digester.parse(in);
 	}
-	
+
+	private static McfProductCatalogue readV6(InputStream in) throws IOException, SAXException {
+		Digester digester = new Digester();
+		digester.addObjectCreate("description", McfProductCatalogueImpl.class);
+		digester.addObjectCreate("description/product", McfAlbumTypeImpl.class);
+		DigesterUtil.addSetProperties(digester, "description/product", getAlbumSpecialAttributes());
+		DigesterUtil.addSetProperties(digester, "description/product/usablesize", getUsableSizeAttributes());
+		digester.addCallMethod("description/product/spines/spine", "addSpine", 2,
+				new String[] { Integer.class.getName(), Integer.class.getName() });
+		digester.addCallParam("description/product/spines/spine", 0, "pages");
+		digester.addCallParam("description/product/spines/spine", 1, "width");
+		digester.addSetNext("description/product", "addAlbumType");
+
+		return digester.parse(in);
+	}
+
 	private static List<String[]> getAlbumSpecialAttributes() {
 		List<String[]> result = new Vector<String[]>();
 		result.add(new String[] { "safetymargin", "safetyMargin" });
@@ -54,12 +77,12 @@ public abstract class McfProductCatalogue {
 		result.add(new String[] { "bleedmargincover", "bleedMarginCover" });
 		return result;
 	}
-	
+
 	private static List<String[]> getUsableSizeAttributes() {
 		List<String[]> result = new Vector<String[]>();
 		result.add(new String[] { "width", "usableWidth" });
 		result.add(new String[] { "height", "usableHeight" });
 		return result;
 	}
-	
+
 }

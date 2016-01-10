@@ -94,23 +94,10 @@ public class Mcf2FoConverter {
 			throw new IOException("MCF Resources Directory " + resourcesDir.getAbsolutePath() + " does not exist");
 		}
 
-		for (File f : resourcesDir.listFiles((FilenameFilter)FileFilterUtils.suffixFileFilter(".xml"))) {
-			// try to read, fail is ok!
-			FileInputStream fis = null;
-			try {
-				log.debug("Checking XML file for product catalogue: " + f);
-				fis = new FileInputStream(f);
-				McfProductCatalogue cat = McfProductCatalogue.read(fis);
-				if (cat != null && !cat.isEmpty()) {
-					log.debug("Adding product catalogue found in " + f);
-					productCatalogues.add(cat);
-				}
-			}
-			catch (Exception e) {
-			}
-			finally {
-				IOUtils.closeQuietly(fis);
-			}
+		scanForProducts(resourcesDir, McfProductCatalogue.CatalogueVersion.PRE_V6);
+		File productsDir = new File(resourcesDir, "products");
+		if (productsDir.isDirectory()) {
+			scanForProducts(productsDir, McfProductCatalogue.CatalogueVersion.V6);
 		}
 
 		// search all resources
@@ -309,6 +296,27 @@ public class Mcf2FoConverter {
 		}
 
 		return null;
+	}
+
+	private void scanForProducts(File productsDir, McfProductCatalogue.CatalogueVersion version) {
+		for (File f : productsDir.listFiles((FilenameFilter)FileFilterUtils.suffixFileFilter(".xml"))) {
+			// try to read, fail is ok!
+			FileInputStream fis = null;
+			try {
+				log.debug("Checking XML file for product catalogue: " + f);
+				fis = new FileInputStream(f);
+				McfProductCatalogue cat = McfProductCatalogue.read(fis, version);
+				if (cat != null && !cat.isEmpty()) {
+					log.debug("Adding product catalogue found in " + f);
+					productCatalogues.add(cat);
+				}
+			}
+			catch (Exception e) {
+			}
+			finally {
+				IOUtils.closeQuietly(fis);
+			}
+		}
 	}
 
 }
