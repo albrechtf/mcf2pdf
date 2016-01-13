@@ -66,14 +66,11 @@ public final class ImageUtil {
 	}
 
 	/**
-	 * Retrieves resolution information from the given image file. Currently, only
-	 * JPEG formats with EXIF information are supported.
-	 *
-	 * @param imageFile (JPEG) image file.
-	 *
-	 * @return An array containing the x- and the y-resolution, in dots per inch,
-	 * of the given file.
-	 *
+	 * Retrieves resolution information from the given image file. As CEWE algorithm seems to have changed, always returns default
+	 * resolution for JPEG files.
+	 * 
+	 * @return An array containing the x- and the y-resolution, in dots per inch, of the given file.
+	 * 
 	 * @throws IOException If any I/O related problem occurs reading the file.
 	 */
 	public static float[] getImageResolution(File imageFile) throws IOException {
@@ -86,36 +83,15 @@ public final class ImageUtil {
 					return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
 				}
 				double[] dpi = meta.getDpi();
-				return new float[] { (float)dpi[0], (float)dpi[1] };
+				return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
+				//return new float[] { (float)dpi[0], (float)dpi[1] };
 			}
 			catch (PngjException e) {
 				throw new IOException("Could not determine image resolution of file " + imageFile.getAbsolutePath(), e);
 			}
 		}
 
-		try {
-			Metadata md = ImageMetadataReader.readMetadata(imageFile);
-
-			ExifDirectory ed = (ExifDirectory)md.getDirectory(ExifDirectory.class);
-
-			if (ed != null) {
-				if (!ed.containsTag(ExifDirectory.TAG_X_RESOLUTION) || !ed.containsTag(ExifDirectory.TAG_Y_RESOLUTION))
-					return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
-
-				float x = ed.getFloat(ExifDirectory.TAG_X_RESOLUTION);
-				float y = ed.getFloat(ExifDirectory.TAG_Y_RESOLUTION);
-				// Use always the default resolution, otherwise the image will be scaled up or down.
-				return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
-				//return new float[] { x, y };
-			}
-
-			return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
-
-		} catch (ImageProcessingException e) {
-			throw new IOException("Could not determine image resolution of file " + imageFile.getAbsolutePath(), e);
-		} catch (MetadataException e) {
-			return null;
-		}
+		return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
 	}
 
 	public static BufferedImage readImage(File imageFile) throws IOException {
@@ -141,6 +117,11 @@ public final class ImageUtil {
 	}
 
 	private static int getImageRotation(File imageFile) throws IOException {
+		// ToDo: determine rotation for png's, method below leads to crash
+		if (imageFile.getName().toLowerCase(Locale.US).endsWith(".png")) {
+			return 0;
+		}
+		
 		try {
 			Metadata md = ImageMetadataReader.readMetadata(imageFile);
 
