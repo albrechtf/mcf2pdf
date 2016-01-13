@@ -83,7 +83,8 @@ public final class ImageUtil {
 					return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
 				}
 				double[] dpi = meta.getDpi();
-				return new float[] { (float)dpi[0], (float)dpi[1] };
+				return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
+				//return new float[] { (float)dpi[0], (float)dpi[1] };
 			}
 			catch (PngjException e) {
 				throw new IOException("Could not determine image resolution of file " + imageFile.getAbsolutePath(), e);
@@ -116,6 +117,11 @@ public final class ImageUtil {
 	}
 
 	private static int getImageRotation(File imageFile) throws IOException {
+		// ToDo: determine rotation for png's, method below leads to crash
+		if (imageFile.getName().toLowerCase(Locale.US).endsWith(".png")) {
+			return 0;
+		}
+		
 		try {
 			Metadata md = ImageMetadataReader.readMetadata(imageFile);
 
