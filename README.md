@@ -106,10 +106,11 @@ If you get any error like "Unrecognized command: java", please make sure that
 a Java Runtime (1.6.0 or newer) is installed and the Java Executable is on your
 PATH. Ask Google if you do not know what this means.
 
-If you get an error like "Java Heap Space", there is not enough memory for the
-page rendering. This is mostly due to a too high DPI setting. Well, as you seem
-to be an expert to use this option, you won't have any problems to adjust the
-startup script (see chapter 2) to set higher memory levels for Java, will you?
+If you get an error like "Java Heap Space" or OutOfMemoryException, 
+there is not enough memory for the page rendering. Adjust the startup 
+script (see chapter 2) to set higher memory  levels for Java. You can find memory 
+settings in the line containing `MCF2PDF_JAVA_OPTS=...`. 
+Increase the option `-Xmx128M` e.g. to 512M.
 
 ## Legal Stuff (Disclaimer)
 
