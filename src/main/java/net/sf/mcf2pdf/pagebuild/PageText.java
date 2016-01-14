@@ -65,10 +65,6 @@ public class PageText implements PageDrawable {
 		// parse text out of content
 		String htmlText = text.getHtmlContent();
 
-		if (htmlText.contains("Partner Narr")){
-			String jetzt = "gehts los";
-		}
-		
 		paras = new Vector<FormattedTextParagraph>();
 
 		// <body> contains text style-information, which is parsed here
