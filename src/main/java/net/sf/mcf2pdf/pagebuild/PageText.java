@@ -152,8 +152,6 @@ public class PageText implements PageDrawable {
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = img.createGraphics();
 		// Position of the text is determined by <table> margins if available
-		//int curY = context.toPixel(text.getVerticalIndentMargin() / 10.0f);
-		//int curY = 0;
 		int curY = marginTop;
 		int x = context.toPixel(text.getIndentMargin() / 10.0f);
 
@@ -163,7 +161,6 @@ public class PageText implements PageDrawable {
 			graphics.fillRect(0, 0, width, height);
 		}
 
-//		Rectangle rc = new Rectangle(x, 0, width - x, height);
 		Rectangle rc = new Rectangle(x, 0, width , height);
 
 		for (FormattedTextParagraph para : paras) {
@@ -335,14 +332,13 @@ public class PageText implements PageDrawable {
 	
 	// <table> margins
 	private int marginTop = 0;
-	private int marginBottom = 0;
 	private int marginLeft = 0;
 	private int marginRight = 0;
 	
 	private void setTableMargins(String css) {
 		// parse attributes out of css
 		String[] avPairs = css.split(";");
-
+		
 		for (String avp : avPairs) {
 			avp = avp.trim();
 			if (!avp.contains(":"))
@@ -352,16 +348,14 @@ public class PageText implements PageDrawable {
 				continue;
 			String a = av[0].trim();
 			String v = av[1].trim();
-
-			try {
-				if ("margin-top".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginTop = Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
-				if ("margin-bottom".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginBottom = Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
-				if ("margin-left".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginLeft = Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
-				if ("margin-right".equalsIgnoreCase(a) && v.matches("[0-9]+px"))
-					marginRight = Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
+			
+			try{
+				if (isValidMargin("margin-top",a,v))
+					marginTop = getInt(v);
+				if (isValidMargin("margin-left",a,v))
+					marginLeft = getInt(v);
+				if (isValidMargin("margin-right",a,v))
+					marginRight = getInt(v);
 			}
 			catch (Exception e) {
 				// ignore invalid attributes
@@ -369,6 +363,12 @@ public class PageText implements PageDrawable {
 		}
 
 	}
-
+	private int getInt(String v){
+		return Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
+	}
+	private boolean isValidMargin(String s, String a, String v)
+	{
+		return s.equalsIgnoreCase(a) && v.matches("[0-9]+px");
+	}
 
 }
