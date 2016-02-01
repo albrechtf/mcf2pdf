@@ -74,21 +74,6 @@ public final class ImageUtil {
 	 * @throws IOException If any I/O related problem occurs reading the file.
 	 */
 	public static float[] getImageResolution(File imageFile) throws IOException {
-		// if it is PNG, use PNG decoder
-		if (imageFile.getName().toLowerCase(Locale.US).endsWith(".png")) {
-			try {
-				PngReader pngReader = new PngReader(imageFile);
-				PngMetadata meta = pngReader.getMetadata();
-				if (meta == null || meta.getDpi() == null || meta.getDpi()[0] == -1) {
-					return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
-				}
-				double[] dpi = meta.getDpi();
-				return new float[] { (float)dpi[0], (float)dpi[1] };
-			}
-			catch (PngjException e) {
-				throw new IOException("Could not determine image resolution of file " + imageFile.getAbsolutePath(), e);
-			}
-		}
 
 		return new float[] { DEFAULT_RESOLUTION, DEFAULT_RESOLUTION };
 	}
