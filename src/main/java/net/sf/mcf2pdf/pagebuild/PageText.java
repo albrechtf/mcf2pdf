@@ -109,7 +109,6 @@ public class PageText implements PageDrawable {
 			}
 
 			String paraContent = mp.group(2);
-			System.out.println("Para content: " + paraContent);
 			Matcher ms = PATTERN_HTML_TEXT_SPAN.matcher(paraContent);
 			int curSpanStart = 0;
 			while (ms.find(curSpanStart)) {
