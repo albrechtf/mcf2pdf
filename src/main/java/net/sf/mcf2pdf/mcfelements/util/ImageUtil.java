@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -35,10 +34,6 @@ import org.apache.batik.util.XMLResourceDescriptor;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.svg.SVGDocument;
 import org.w3c.dom.svg.SVGPreserveAspectRatio;
-
-import ar.com.hjg.pngj.PngReader;
-import ar.com.hjg.pngj.PngjException;
-import ar.com.hjg.pngj.chunks.PngMetadata;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
