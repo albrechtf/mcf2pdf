@@ -29,13 +29,16 @@ import net.sf.mcf2pdf.pagebuild.FormattedTextParagraph.Alignment;
  */
 public class PageText implements PageDrawable {
 
-	private static final Pattern PATTERN_HTML_TEXT_PARA = Pattern.compile("<p\\s([^>]*)>(([^<]|<[^/]|</[^p]|</p[^>])*)</p>");
+	private static final Pattern PATTERN_HTML_TEXT_PARA = Pattern.compile("<p\\s([^>]*)>((.(?!</p>))*.)</p>");
 	private static final Pattern PATTERN_PARA_ALIGN = Pattern.compile("(?:\\s|^)align=\"([^\"]+)\"");
 	private static final Pattern PATTERN_PARA_STYLE = Pattern.compile("(?:\\s|^)style=\"([^\"]+)\"");
-	private static final Pattern PATTERN_HTML_TEXT_SPAN = Pattern.compile("<span\\s+style=\"([^\"]+)\"[^>]*>([^<]+)</span>");
+
+	private static final Pattern PATTERN_HTML_TEXT_SPAN = Pattern.compile("<span\\s+style=\"([^\"]+)\"[^>]*>((.(?!</span>))*.)</span>");
 	private static final Pattern PATTERN_BODY_STYLE = Pattern.compile("<body\\s([^>]*)style=\"([^\"]+)\">");
 	private static final Pattern PATTERN_TABLE_STYLE = Pattern.compile("<table\\s([^>]*)style=\"([^\"]+)\">");
 	private static final Pattern PATTERN_HTML_TEXT = Pattern.compile("([^<]\\w+[^/> ])");
+
+	private static final String BR_TAG = "<br />";
 
 	private McfText text;
 
@@ -106,10 +109,21 @@ public class PageText implements PageDrawable {
 			}
 
 			String paraContent = mp.group(2);
+			System.out.println("Para content: " + paraContent);
 			Matcher ms = PATTERN_HTML_TEXT_SPAN.matcher(paraContent);
 			int curSpanStart = 0;
 			while (ms.find(curSpanStart)) {
-				para.addText(createFormattedText(ms.group(2), ms.group(1)));
+				String spanText = ms.group(2);
+				String spanCss = ms.group(1);
+				while (spanText.contains(BR_TAG)) {
+					String text = spanText.substring(0, spanText.indexOf(BR_TAG));
+					para.addText(createFormattedText(text, spanCss));
+					paras.add(para);
+					para = para.createEmptyCopy();
+					spanText = spanText.substring(spanText.indexOf(BR_TAG) + BR_TAG.length());
+				}
+
+				para.addText(createFormattedText(spanText, spanCss));
 				curSpanStart = ms.end();
 			}
 			curStart = mp.end();
@@ -119,7 +133,16 @@ public class PageText implements PageDrawable {
 				Matcher mt = PATTERN_HTML_TEXT.matcher(paraContent);
 				int curTextStart = 0;
 				while (mt.find(curTextStart)){
-					para.addText(createFormattedText(mt.group(), ""));
+					String paraText = mt.group();
+					while (paraText.contains(BR_TAG)) {
+						String text = paraText.substring(0, paraText.indexOf(BR_TAG));
+						para.addText(createFormattedText(text, ""));
+						paras.add(para);
+						para = para.createEmptyCopy();
+						paraText = paraText.substring(paraText.indexOf(BR_TAG) + BR_TAG.length());
+					}
+					
+					para.addText(createFormattedText(paraText, ""));
 					curTextStart = mt.end();
 				}
 			}
@@ -362,8 +385,8 @@ public class PageText implements PageDrawable {
 	private int getInt(String v){
 		return Integer.valueOf(v.substring(0, v.indexOf("px"))).intValue();
 	}
-	private boolean isValidMargin(String s, String a, String v)
-	{
+
+	private boolean isValidMargin(String s, String a, String v) {
 		return s.equalsIgnoreCase(a) && v.matches("[0-9]+px");
 	}
 

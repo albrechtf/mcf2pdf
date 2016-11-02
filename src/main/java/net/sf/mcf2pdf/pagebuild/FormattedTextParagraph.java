@@ -3,12 +3,18 @@
  *******************************************************************************/
 package net.sf.mcf2pdf.pagebuild;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.font.TextAttribute;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class FormattedTextParagraph {
 	
@@ -23,6 +29,12 @@ public class FormattedTextParagraph {
 	public FormattedTextParagraph() {
 	}
 	
+	public FormattedTextParagraph createEmptyCopy() {
+		FormattedTextParagraph result = new FormattedTextParagraph();
+		result.alignment = alignment;
+		return result;
+	}
+
 	public void addText(FormattedText text) {
 		// if we contain an empty start text, remove that now!
 		if (texts.size() == 1 && texts.get(0).getText().length() == 0)
@@ -75,8 +87,10 @@ public class FormattedTextParagraph {
 			map.put(TextAttribute.SIZE, fontSizeInch * context.getTargetDpi());
 			font = font.deriveFont(map);
 			map.put(TextAttribute.FONT, font);
-						
-			string.addAttributes(map, start, start + text.getText().length());
+
+			if (text.getText().length() > 0) {
+				string.addAttributes(map, start, start + text.getText().length());
+			}
 			start += text.getText().length();
 		}
 		
