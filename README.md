@@ -4,6 +4,8 @@ Latest Release: Version 0.3.1
 
 Author: Florian Albrecht
 
+Downloads can be found [here](https://github.com/albrechtf/mcf2pdf/releases). Please read the **installation instructions** below carefully, **otherwise the software will definitely not work for you.** You have been warned.
+
 ## What is mcf2pdf? What not?
 
 This program enables you to convert photobooks created with the Mein CEWE
