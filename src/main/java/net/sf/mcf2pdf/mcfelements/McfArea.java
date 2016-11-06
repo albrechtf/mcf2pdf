@@ -53,4 +53,6 @@ public interface McfArea {
 
 	public McfAreaContent getContent();
 
+	public McfBorder getBorder();
+
 }

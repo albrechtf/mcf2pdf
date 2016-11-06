@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 
+import net.sf.mcf2pdf.mcfelements.McfBorder;
 import net.sf.mcf2pdf.mcfelements.McfImage;
 import net.sf.mcf2pdf.mcfelements.util.FadingComposite;
 import net.sf.mcf2pdf.mcfelements.util.ImageUtil;
@@ -92,7 +93,16 @@ public class PageImage implements PageDrawable {
 		double sh = (tmmY * resY) / scale;
 
 		// draw border and / or shadow?
-		int borderWidth = (maskFile != null | !image.getArea().isBorderEnabled()) ? 0 : context.toPixel(image.getArea().getBorderSize() / 10.0f);
+		int borderWidth = (maskFile != null || !image.getArea().isBorderEnabled()) ? 0
+				: context.toPixel(image.getArea().getBorderSize() / 10.0f);
+		Color borderColor = image.getArea().getBorderColor();
+		// check for Format 6 - border may be child element
+		if (image.getArea().getBorder() != null) {
+			McfBorder border = image.getArea().getBorder();
+			borderWidth = border.isEnabled() ? context.toPixel(border.getWidth() / 10.0f) : 0;
+			borderColor = border.getColor();
+		}
+
 		int shadowDistance = (maskFile != null | !image.getArea().isShadowEnabled()) ? 0 : context.toPixel(image.getArea().getShadowDistance() / 10.0f);
 		int xAddShadow = (int)Math.round(shadowDistance * Math.sin(Math.toRadians(image.getArea().getShadowAngle())));
 		int yAddShadow = (int)Math.round(shadowDistance * -Math.cos(Math.toRadians(image.getArea().getShadowAngle())));
@@ -127,7 +137,7 @@ public class PageImage implements PageDrawable {
 			int btop = yAddShadow < 0 ? Math.max(0, -yAddShadow - borderWidth) : 0;
 			imgLeft = bleft + borderWidth;
 			imgTop = btop + borderWidth;
-			g2d.setColor(image.getArea().getBorderColor());
+			g2d.setColor(borderColor);
 			g2d.fillRect(bleft, btop, widthPixel + 2 * borderWidth, heightPixel + 2 * borderWidth);
 		}
 

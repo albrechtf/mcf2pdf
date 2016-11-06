@@ -7,6 +7,7 @@ import java.awt.Color;
 
 import net.sf.mcf2pdf.mcfelements.McfArea;
 import net.sf.mcf2pdf.mcfelements.McfAreaContent;
+import net.sf.mcf2pdf.mcfelements.McfBorder;
 import net.sf.mcf2pdf.mcfelements.McfPage;
 
 
@@ -46,6 +47,9 @@ public class McfAreaImpl implements McfArea {
 	
 	private McfAreaContent content;
 	
+	private McfBorder border;
+
+	@Override
 	public McfPage getPage() {
 		return page;
 	}
@@ -54,6 +58,7 @@ public class McfAreaImpl implements McfArea {
 		this.page = page;
 	}
 
+	@Override
 	public float getLeft() {
 		return left;
 	}
@@ -62,6 +67,7 @@ public class McfAreaImpl implements McfArea {
 		this.left = left;
 	}
 
+	@Override
 	public float getTop() {
 		return top;
 	}
@@ -70,6 +76,7 @@ public class McfAreaImpl implements McfArea {
 		this.top = top;
 	}
 
+	@Override
 	public float getWidth() {
 		return width;
 	}
@@ -78,6 +85,7 @@ public class McfAreaImpl implements McfArea {
 		this.width = width;
 	}
 
+	@Override
 	public float getHeight() {
 		return height;
 	}
@@ -86,6 +94,7 @@ public class McfAreaImpl implements McfArea {
 		this.height = height;
 	}
 
+	@Override
 	public float getRotation() {
 		return rotation;
 	}
@@ -94,6 +103,7 @@ public class McfAreaImpl implements McfArea {
 		this.rotation = rotation;
 	}
 
+	@Override
 	public int getZPosition() {
 		return zPosition;
 	}
@@ -102,6 +112,7 @@ public class McfAreaImpl implements McfArea {
 		this.zPosition = zPosition;
 	}
 
+	@Override
 	public String getAreaType() {
 		return areaType;
 	}
@@ -110,6 +121,7 @@ public class McfAreaImpl implements McfArea {
 		this.areaType = areaType;
 	}
 
+	@Override
 	public boolean isBorderEnabled() {
 		return borderEnabled;
 	}
@@ -118,6 +130,7 @@ public class McfAreaImpl implements McfArea {
 		this.borderEnabled = borderEnabled;
 	}
 	
+	@Override
 	public float getBorderSize() {
 		return borderSize;
 	}
@@ -126,6 +139,7 @@ public class McfAreaImpl implements McfArea {
 		this.borderSize = borderSize;
 	}
 
+	@Override
 	public Color getBorderColor() {
 		return borderColor;
 	}
@@ -134,6 +148,7 @@ public class McfAreaImpl implements McfArea {
 		this.borderColor = borderColor;
 	}
 	
+	@Override
 	public boolean isShadowEnabled() {
 		return shadowEnabled;
 	}
@@ -142,6 +157,7 @@ public class McfAreaImpl implements McfArea {
 		this.shadowEnabled = shadowEnabled;
 	}
 
+	@Override
 	public int getShadowAngle() {
 		return shadowAngle;
 	}
@@ -150,6 +166,7 @@ public class McfAreaImpl implements McfArea {
 		this.shadowAngle = shadowAngle;
 	}
 
+	@Override
 	public int getShadowIntensity() {
 		return shadowIntensity;
 	}
@@ -158,6 +175,7 @@ public class McfAreaImpl implements McfArea {
 		this.shadowIntensity = shadowIntensity;
 	}
 
+	@Override
 	public float getShadowDistance() {
 		return shadowDistance;
 	}
@@ -166,6 +184,7 @@ public class McfAreaImpl implements McfArea {
 		this.shadowDistance = shadowDistance;
 	}
 
+	@Override
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -174,12 +193,21 @@ public class McfAreaImpl implements McfArea {
 		this.backgroundColor = backgroundColor;
 	}
 
+	@Override
 	public McfAreaContent getContent() {
 		return content;
 	}
 
 	public void setContent(McfAreaContent content) {
 		this.content = content;
+	}
+
+	public McfBorder getBorder() {
+		return border;
+	}
+
+	public void setBorder(McfBorder border) {
+		this.border = border;
 	}
 
 }

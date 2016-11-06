@@ -9,17 +9,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
-import net.sf.mcf2pdf.mcfelements.DigesterConfigurator;
-import net.sf.mcf2pdf.mcfelements.McfArea;
-import net.sf.mcf2pdf.mcfelements.McfBackground;
-import net.sf.mcf2pdf.mcfelements.McfClipart;
-import net.sf.mcf2pdf.mcfelements.McfFotobook;
-import net.sf.mcf2pdf.mcfelements.McfImage;
-import net.sf.mcf2pdf.mcfelements.McfImageBackground;
-import net.sf.mcf2pdf.mcfelements.McfPage;
-import net.sf.mcf2pdf.mcfelements.McfText;
-import net.sf.mcf2pdf.mcfelements.util.DigesterUtil;
-
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
@@ -28,6 +17,18 @@ import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.Substitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
+
+import net.sf.mcf2pdf.mcfelements.DigesterConfigurator;
+import net.sf.mcf2pdf.mcfelements.McfArea;
+import net.sf.mcf2pdf.mcfelements.McfBackground;
+import net.sf.mcf2pdf.mcfelements.McfBorder;
+import net.sf.mcf2pdf.mcfelements.McfClipart;
+import net.sf.mcf2pdf.mcfelements.McfFotobook;
+import net.sf.mcf2pdf.mcfelements.McfImage;
+import net.sf.mcf2pdf.mcfelements.McfImageBackground;
+import net.sf.mcf2pdf.mcfelements.McfPage;
+import net.sf.mcf2pdf.mcfelements.McfText;
+import net.sf.mcf2pdf.mcfelements.util.DigesterUtil;
 
 
 /**
@@ -73,6 +74,7 @@ public class DigesterConfiguratorImpl implements DigesterConfigurator {
 		}
 	};
 
+	@Override
 	public void configureDigester(Digester digester, File mcfFile)
 			throws IOException {
 		digester.setSubstitutor(createSubstitutor());
@@ -98,6 +100,11 @@ public class DigesterConfiguratorImpl implements DigesterConfigurator {
 		digester.addSetTop("fotobook/page/area", "setPage");
 		DigesterUtil.addSetProperties(digester, "fotobook/page/area", getSpecialAreaAttributes());
 		digester.addSetNext("fotobook/page/area", "addArea", McfArea.class.getName());
+
+		// border element
+		digester.addObjectCreate("fotobook/page/area/border", getBorderClass());
+		DigesterUtil.addSetProperties(digester, "fotobook/page/area/border", getSpecialBorderAttributes());
+		digester.addSetNext("fotobook/page/area/border", "setBorder");
 
 		// text element, including textFormat element
 		digester.addObjectCreate("fotobook/page/area/text", getTextClass());
@@ -245,5 +252,17 @@ public class DigesterConfiguratorImpl implements DigesterConfigurator {
 		return McfImageBackgroundImpl.class;
 	}
 
+	protected Class<? extends McfBorder> getBorderClass() {
+		return McfBorderImpl.class;
+	}
+
+	protected List<String[]> getSpecialBorderAttributes() {
+		List<String[]> result = new Vector<String[]>();
+		result.add(new String[] { "color", "color" });
+		result.add(new String[] { "offset", "offset" });
+		result.add(new String[] { "width", "width" });
+		result.add(new String[] { "enabled", "enabled" });
+		return result;
+	}
 
 }
