@@ -148,7 +148,7 @@ public class Mcf2FoConverter {
 	 * @throws SAXException If any XML related problem occurs, e.g. the input file
 	 * has an invalid format.
 	 */
-	public void convert(File mcfFile, OutputStream xslFoOut, int dpi, int maxPageNo) throws IOException, SAXException {
+	public void convert(File mcfFile, OutputStream xslFoOut, int dpi, boolean binding, int maxPageNo) throws IOException, SAXException {
 		// build MCF DOM
 		log.debug("Reading MCF file");
 		McfFotobook book = new FotobookBuilder().readFotobook(mcfFile);
@@ -236,7 +236,7 @@ public class Mcf2FoConverter {
 			log.info("Rendering pages " + i + "+" + (i+1) + "...");
 			processDoublePage(normalPages.get(i),
 					i + 1 < normalPages.size() ? normalPages.get(i + 1) : null,
-					imageDir, true);
+					imageDir, binding);
 			currentPage.addToDocumentBuilder(docBuilder);
 			if (i < normalPages.size() - 2) {
 				docBuilder.newPage();
