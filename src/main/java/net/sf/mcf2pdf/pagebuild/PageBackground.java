@@ -12,9 +12,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import net.sf.mcf2pdf.mcfelements.McfBackground;
+import net.sf.mcf2pdf.mcfelements.util.ImageUtil;
 import net.sf.mcf2pdf.mcfglobals.McfAlbumType;
 
 
@@ -74,7 +73,10 @@ public class PageBackground implements PageDrawable {
 	}
 
 	private void drawBackground(File f, Graphics2D g2d, int x, int y, int width, int height) throws IOException {
-		BufferedImage img = ImageIO.read(f);
+		BufferedImage img = ImageUtil.readImage(f);
+		if (img == null) {
+			throw new IOException("Could not read image file: " + f.getAbsolutePath());
+		}
 
 		float tgtRatio = width / (float)height;
 

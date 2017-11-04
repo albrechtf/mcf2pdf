@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -41,6 +42,9 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifDirectoryBase;
 
+import net.sf.mcf2pdf.mcfelements.util.webp.Qt5Webp;
+import net.sf.mcf2pdf.mcfelements.util.webp.Qt5WebpLib;
+
 /**
  * Utility class for working with images in the context of the mcf2pdf project.
  */
@@ -57,15 +61,24 @@ public final class ImageUtil {
 
 	public static final double SQRT_2 = Math.sqrt(2);
 
+	private static File ceweInstallDir;
+
+	private static Qt5WebpLib qt5Library;
+
 	private ImageUtil() {
 	}
+
+	public static void init(File ceweInstallDir) {
+		ImageUtil.ceweInstallDir = ceweInstallDir;
+	}
+
 
 	/**
 	 * Retrieves resolution information from the given image file. As CEWE algorithm seems to have changed, always returns default
 	 * resolution for JPEG files.
-	 * 
+	 *
 	 * @return An array containing the x- and the y-resolution, in dots per inch, of the given file.
-	 * 
+	 *
 	 * @throws IOException If any I/O related problem occurs reading the file.
 	 */
 	public static float[] getImageResolution(File imageFile) throws IOException {
@@ -75,7 +88,7 @@ public final class ImageUtil {
 
 	public static BufferedImage readImage(File imageFile) throws IOException {
 		int rotation = getImageRotation(imageFile);
-		BufferedImage img = ImageIO.read(imageFile);
+		BufferedImage img = internalRead(imageFile);
 
 		if (rotation == 0) {
 			return img;
@@ -147,8 +160,8 @@ public final class ImageUtil {
 		SVGDocument svgDocument;
 		GraphicsNode rootSvgNode;
 		try {
-	    String parser = XMLResourceDescriptor.getXMLParserClassName();
-	    SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory(parser);
+			String parser = XMLResourceDescriptor.getXMLParserClassName();
+			SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory(parser);
 			svgDocument = (SVGDocument)factory.createDocument(clpFile.toURI().toString(), new InputStreamReader(in, "ISO-8859-1"));
 			rootSvgNode = getRootNode(svgDocument, bridgeContext);
 		}
@@ -254,4 +267,16 @@ public final class ImageUtil {
 		return imgTgt;
 	}
 
+	private static BufferedImage internalRead(File f) throws IOException {
+		// special treatment for webp files
+		if (f.getName().toLowerCase(Locale.US).endsWith(".webp")) {
+			if (qt5Library == null) {
+				qt5Library = Qt5Webp.loadLibrary(ceweInstallDir);
+			}
+
+			return Qt5Webp.loadWebPImage(f, qt5Library);
+		}
+
+		return ImageIO.read(f);
+	}
 }

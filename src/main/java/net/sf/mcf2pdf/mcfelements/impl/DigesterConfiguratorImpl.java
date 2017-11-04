@@ -19,6 +19,10 @@ import org.apache.commons.digester3.Substitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
+import net.sf.mcf2pdf.mcfconfig.Clipart;
+import net.sf.mcf2pdf.mcfconfig.Decoration;
+import net.sf.mcf2pdf.mcfconfig.Fading;
+import net.sf.mcf2pdf.mcfconfig.Fotoarea;
 import net.sf.mcf2pdf.mcfconfig.Template;
 import net.sf.mcf2pdf.mcfelements.DigesterConfigurator;
 import net.sf.mcf2pdf.mcfelements.McfArea;
@@ -62,6 +66,12 @@ public class DigesterConfiguratorImpl implements DigesterConfigurator {
 				if (!value.toString().startsWith("#")) {
 					return longToColor(Long.parseLong(value.toString()));
 				}
+
+				// could still be full INT, but in HEX notation...
+				if (value.toString().length() > 7) {
+					return longToColor(Long.parseLong(value.toString().substring(1), 16));
+				}
+
 				return Color.decode(value.toString());
 			}
 
@@ -133,12 +143,28 @@ public class DigesterConfiguratorImpl implements DigesterConfigurator {
 		DigesterUtil.addSetProperties(digester, "fotobook/page/area/imagebackground", getSpecialImageAttributes());
 		digester.addSetNext("fotobook/page/area/imagebackground", "setContent");
 		digester.addSetTop("fotobook/page/area/imagebackground", "setArea");
-		
+
 		// colors config file
 		digester.addObjectCreate("templates", LinkedList.class);
 		digester.addObjectCreate("templates/template", Template.class);
 		digester.addSetProperties("templates/template");
 		digester.addSetNext("templates/template", "add");
+
+		// Decorations (fotoframes)
+		digester.addObjectCreate("decorations", LinkedList.class);
+		digester.addObjectCreate("decorations/decoration", Decoration.class);
+		digester.addObjectCreate("decorations/decoration/fading", Fading.class);
+		digester.addSetProperties("decorations/decoration/fading");
+		digester.addSetNext("decorations/decoration/fading", "setFading");
+
+		digester.addObjectCreate("decorations/decoration/fading/clipart", Clipart.class);
+		digester.addSetProperties("decorations/decoration/fading/clipart");
+		digester.addSetNext("decorations/decoration/fading/clipart", "setClipart");
+
+		digester.addObjectCreate("decorations/decoration/fading/fotoarea", Fotoarea.class);
+		digester.addSetProperties("decorations/decoration/fading/fotoarea");
+		digester.addSetNext("decorations/decoration/fading/fotoarea", "setFotoarea");
+		digester.addSetNext("decorations/decoration", "add");
 	}
 
 	private final static Substitutor FLOAT_SUBSTITUTOR = new Substitutor() {

@@ -17,6 +17,9 @@ import net.sf.mcf2pdf.mcfelements.McfImage;
 import net.sf.mcf2pdf.mcfelements.util.FadingComposite;
 import net.sf.mcf2pdf.mcfelements.util.ImageUtil;
 import net.sf.mcf2pdf.mcfelements.util.McfFileUtil;
+import net.sf.mcf2pdf.mcfglobals.McfFotoFrame;
+import net.sf.mcf2pdf.mcfconfig.Fading;
+import net.sf.mcf2pdf.mcfconfig.Fotoarea;
 
 
 /**
@@ -71,9 +74,25 @@ public class PageImage implements PageDrawable {
 
 		// check for "fading" file
 		File maskFile = null;
+		File clipartFile = null;
+		Fotoarea fotoArea = null;
 		if (image.getFadingFile() != null) {
-			maskFile = context.getFading(image.getFadingFile());
-			if (maskFile == null)
+			McfFotoFrame frame = context.getFotoFrame(image.getFadingFile());
+			if (frame != null && frame.getFading() != null) {
+				maskFile = frame.getFading();
+			} else {
+				maskFile = context.getFading(image.getFadingFile());
+			}
+			if (frame != null && frame.getClipart() != null) {
+				clipartFile = frame.getClipart();
+			}
+			if (frame != null) {
+				Fading config = frame.getConfig();
+				if (config != null) {
+					fotoArea = config.getFotoarea();
+				}
+			}
+			if (maskFile == null) 
 				context.getLog().warn("Could not find fading file: " + image.getFadingFile());
 		}
 
@@ -141,27 +160,62 @@ public class PageImage implements PageDrawable {
 			g2d.fillRect(bleft, btop, widthPixel + 2 * borderWidth, heightPixel + 2 * borderWidth);
 		}
 
-		drawOffsetPixels.x = -imgLeft;
-		drawOffsetPixels.y = -imgTop;
-
 		int leftOffset = -image.getLeft();
 		int topOffset = -image.getTop();
+		
+		drawOffsetPixels.x = -imgLeft;
+		drawOffsetPixels.y = -imgTop;
+		
+		int effImgWidth = widthPixel;
+		int effImgHeight = heightPixel;
+		if (fotoArea != null) {
+			imgLeft += (int)Math.round(fotoArea.getX() * widthPixel);
+			imgTop += (int)Math.round(fotoArea.getY() * heightPixel);
+			effImgWidth = (int)Math.round(widthPixel * fotoArea.getWidth());
+			effImgHeight = (int)Math.round(heightPixel * fotoArea.getHeight());
+			sw = sw * fotoArea.getWidth();
+			sh = sh * fotoArea.getHeight();
+		}
 
 		// draw main image
-		g2d.drawImage(baseImg, imgLeft, imgTop, imgLeft + widthPixel, imgTop + heightPixel,
-				leftOffset, topOffset, leftOffset + (int)Math.round(sw), topOffset + (int)Math.round(sh), null);
-
+		g2d.drawImage(baseImg, 
+				imgLeft, imgTop, imgLeft + effImgWidth, imgTop + effImgHeight,
+				leftOffset, topOffset, leftOffset + (int)Math.round(sw), topOffset + (int)Math.round(sh),
+				null);
+		
 		// mask image
 		if (maskFile != null) {
+			int x = 0;
+			int y = 0;
+			int effWidth = widthPixel;
+			int effHeight = heightPixel;
+			if (fotoArea != null) {
+				x = (int)(fotoArea.getX() * widthPixel);
+				y = (int)(fotoArea.getY() * heightPixel);
+				effWidth = (int)(widthPixel * fotoArea.getWidth());
+				effHeight = (int)(heightPixel * fotoArea.getHeight());
+			}
+			
 			context.getLog().debug("Applying fading file " + maskFile);
-			BufferedImage imgMask = ImageUtil.loadClpFile(maskFile, widthPixel, heightPixel);
+			BufferedImage imgMask = ImageUtil.loadClpFile(maskFile, effWidth, effHeight);
 
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 			g2d.setComposite(FadingComposite.INSTANCE);
 
-			g2d.drawImage(imgMask, 0, 0, null);
+			g2d.drawImage(imgMask, x, y, null);
 			g2d.setPaintMode();
+		}
+		
+		// clipart image
+		if (clipartFile != null) {
+			int x = 0;
+			int y = 0;
+			context.getLog().debug("Applying clipart file " + maskFile);
+			BufferedImage imgClipart = ImageUtil.loadClpFile(clipartFile, widthPixel, heightPixel);
+			
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.drawImage(imgClipart, x, y, null);
 		}
 
 		g2d.dispose();
