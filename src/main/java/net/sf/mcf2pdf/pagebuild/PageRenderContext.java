@@ -128,6 +128,16 @@ public final class PageRenderContext {
 	}
 	
 	/**
+	 * Return the background image for given color name eg. 'Schwarz'.
+	 * 
+	 * @param name Name of the color
+	 * @return The JPEG file containing the image, or <code>null</code> if not found.
+	 */
+	public File getBackgroundColor(String name) {
+		return resources.getColorImage(name);
+	}
+	
+	/**
 	 * Converts the given millimeter value to pixels, using the DPI setting of this
 	 * context.
 	 * 
@@ -152,5 +162,4 @@ public final class PageRenderContext {
 	public Font getFont(String fontFamily) {
 		return resources.getFont(fontFamily);
 	}
-
 }

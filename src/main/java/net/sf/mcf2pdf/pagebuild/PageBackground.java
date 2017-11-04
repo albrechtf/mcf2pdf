@@ -106,12 +106,15 @@ public class PageBackground implements PageDrawable {
 			PageRenderContext context) throws IOException {
 		for (McfBackground bg : bgs) {
 			String tn = bg.getTemplateName();
-			if (tn == null || !tn.matches("[0-9]+,normal(,.*)?"))
+			if (tn == null || !tn.matches("[a-zA-Z0-9_]+,normal(,.*)?"))
 				continue;
 
 			tn = tn.substring(0, tn.indexOf(","));
 
 			File f = context.getBackgroundImage(tn);
+			if (f == null) {
+				f = context.getBackgroundColor(tn);
+			}
 			if (f == null)
 				context.getLog().warn("Background not found for page " + bg.getPage().getPageNr() + ": " + tn);
 			else
