@@ -39,7 +39,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
-import com.drew.metadata.exif.ExifDirectory;
+import com.drew.metadata.exif.ExifDirectoryBase;
 
 /**
  * Utility class for working with images in the context of the mcf2pdf project.
@@ -99,11 +99,11 @@ public final class ImageUtil {
 		try {
 			Metadata md = ImageMetadataReader.readMetadata(imageFile);
 
-			ExifDirectory ed = (ExifDirectory)md.getDirectory(ExifDirectory.class);
+			ExifDirectoryBase ed = md.getFirstDirectoryOfType(ExifDirectoryBase.class);
 
 			if (ed != null) {
-				if (ed.containsTag(ExifDirectory.TAG_ORIENTATION)) {
-					int o = ed.getInt(ExifDirectory.TAG_ORIENTATION);
+				if (ed.containsTag(ExifDirectoryBase.TAG_ORIENTATION)) {
+					int o = ed.getInt(ExifDirectoryBase.TAG_ORIENTATION);
 					switch (o) {
 					case 3:
 						return 180;
