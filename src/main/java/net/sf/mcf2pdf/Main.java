@@ -184,9 +184,6 @@ public class Main {
 
 		Log log = LogFactory.getLog(Main.class);
 
-		// TODO this is a bad pattern, fix it.
-		ImageUtil.init(installDir);
-
 		try {
 			new Mcf2FoConverter(installDir, tempDir, tempImages).convert(
 					mcfFile, xslFoOut, dpi, binding, maxPageNo);

@@ -61,17 +61,10 @@ public final class ImageUtil {
 
 	public static final double SQRT_2 = Math.sqrt(2);
 
-	private static File ceweInstallDir;
-
 	private static Qt5WebpLib qt5Library;
 
 	private ImageUtil() {
 	}
-
-	public static void init(File ceweInstallDir) {
-		ImageUtil.ceweInstallDir = ceweInstallDir;
-	}
-
 
 	/**
 	 * Retrieves resolution information from the given image file. As CEWE algorithm seems to have changed, always returns default
@@ -271,7 +264,7 @@ public final class ImageUtil {
 		// special treatment for webp files
 		if (f.getName().toLowerCase(Locale.US).endsWith(".webp")) {
 			if (qt5Library == null) {
-				qt5Library = Qt5Webp.loadLibrary(ceweInstallDir);
+				qt5Library = Qt5Webp.loadLibrary();
 			}
 
 			return Qt5Webp.loadWebPImage(f, qt5Library);

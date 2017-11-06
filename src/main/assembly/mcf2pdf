@@ -22,4 +22,4 @@ then
   exit 3
 fi
 
-java $MCF2PDF_JAVA_OPTS -classpath ${classpath}:mcf2pdf-${project.version}.jar net.sf.mcf2pdf.Main -i "$MCF_INSTALL_DIR" -t "$MCF_TEMP_DIR" "$@"
+java $MCF2PDF_JAVA_OPTS -classpath "${classpath}:$MCF_INSTALL_DIR:mcf2pdf-${project.version}.jar" net.sf.mcf2pdf.Main -i "$MCF_INSTALL_DIR" -t "$MCF_TEMP_DIR" "$@"

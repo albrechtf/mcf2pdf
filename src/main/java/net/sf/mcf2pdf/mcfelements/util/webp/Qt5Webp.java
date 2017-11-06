@@ -28,27 +28,19 @@ public final class Qt5Webp {
 	}
 
 	/**
-	 * Loads the Qt5 WebP library from the "imageformats" directory within the
-	 * CEWE installation directory. Under Windows, the library must be named
-	 * <code>qwebp.dll</code>, under Linux and Mac OS X, a
-	 * <code>libqwebp.so</code> is expected.
+	 * Loads the WebP library. Under Windows, the library must be named
+	 * <code>libwebp.dll</code>, under Linux and Mac OS X, a
+	 * <code>libqwebp.so</code> is expected. It must be on the program's
+	 * classpath.
 	 *
-	 * @param ceweInstallDir
-	 *            Installation directory of CEWE software.
 	 * @return The loaded Qt5 WebP library, as a dynamic Java JNA proxy.
 	 *
 	 * @throws IOException
 	 *             If the library cannot be found.
 	 */
-	public static Qt5WebpLib loadLibrary(File ceweInstallDir) throws IOException {
-		String libName = Platform.isWindows() ? "qwebp.dll" : "libqwebp.so";
-		File libFile = new File(ceweInstallDir, "imageformats/" + libName);
-		if (!libFile.isFile()) {
-			throw new FileNotFoundException(
-					"Required Shared Library for WebP format not found: " + libFile.getAbsolutePath());
-		}
-
-		return (Qt5WebpLib) Native.loadLibrary(libFile.getAbsolutePath(), Qt5WebpLib.class);
+	public static Qt5WebpLib loadLibrary() throws IOException {
+		String libName = Platform.isWindows() ? "libwebp.dll" : "libqwebp.so";
+		return (Qt5WebpLib) Native.loadLibrary(libName, Qt5WebpLib.class);
 	}
 
 	/**

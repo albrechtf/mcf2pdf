@@ -27,7 +27,7 @@ REM check if this file has to be adjusted!
 if "%MCF_INSTALL_DIR%" == "" GOTO echo_adjust 
 if "%MCF_TEMP_DIR%" == "" GOTO echo_adjust
 
-java %MCF2PDF_JAVA_OPTS% -classpath ${windowsClasspath};mcf2pdf-${project.version}.jar net.sf.mcf2pdf.Main -i "%MCF_INSTALL_DIR%" -t "%MCF_TEMP_DIR%" %1 %2 %3 %4 %5 %6 %7 %8 %9
+java %MCF2PDF_JAVA_OPTS% -classpath "${windowsClasspath};%MCF_INSTALL_DIR%;mcf2pdf-${project.version}.jar" net.sf.mcf2pdf.Main -i "%MCF_INSTALL_DIR%" -t "%MCF_TEMP_DIR%" %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 GOTO end
 
