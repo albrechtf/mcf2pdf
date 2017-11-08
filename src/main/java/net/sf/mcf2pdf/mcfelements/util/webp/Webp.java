@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
@@ -13,34 +12,34 @@ import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
 /**
- * Utility class to load the Qt5 dynamic library for the WebP file format from
- * the CEWE installation directory, and for convenient WebP image loading using
- * that library.
+ * Utility class to load the dynamic library for the WebP file format from the
+ * CEWE installation directory, and for convenient WebP image loading using that
+ * library.
  *
  * @author Florian Albrecht
  *
- * @see Qt5WebpLib
+ * @see WebpLib
  *
  */
-public final class Qt5Webp {
+public final class Webp {
 
-	private Qt5Webp() {
+	private Webp() {
 	}
 
 	/**
 	 * Loads the WebP library. Under Windows, the library must be named
 	 * <code>libwebp.dll</code>, under Linux and Mac OS X, a
-	 * <code>libqwebp.so</code> is expected. It must be on the program's
-	 * classpath.
+	 * <code>libwebp.so</code> is expected. For Windows and Linux, the shared
+	 * library is included in the mcf2pdf package.
 	 *
-	 * @return The loaded Qt5 WebP library, as a dynamic Java JNA proxy.
+	 * @return The loaded WebP library, as a dynamic Java JNA proxy.
 	 *
 	 * @throws IOException
 	 *             If the library cannot be found.
 	 */
-	public static Qt5WebpLib loadLibrary() throws IOException {
-		String libName = Platform.isWindows() ? "libwebp.dll" : "libqwebp.so";
-		return (Qt5WebpLib) Native.loadLibrary(libName, Qt5WebpLib.class);
+	public static WebpLib loadLibrary() throws IOException {
+		String libName = Platform.isWindows() ? "libwebp.dll" : "libwebp.so";
+		return (WebpLib) Native.loadLibrary(libName, WebpLib.class);
 	}
 
 	/**
@@ -56,7 +55,7 @@ public final class Qt5Webp {
 	 * @throws IOException
 	 *             If the image could not be loaded.
 	 */
-	public static BufferedImage loadWebPImage(File webpImageFile, Qt5WebpLib library) throws IOException {
+	public static BufferedImage loadWebPImage(File webpImageFile, WebpLib library) throws IOException {
 		int[] aw = new int[1];
 		int[] ah = new int[1];
 

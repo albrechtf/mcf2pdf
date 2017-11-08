@@ -42,8 +42,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifDirectoryBase;
 
-import net.sf.mcf2pdf.mcfelements.util.webp.Qt5Webp;
-import net.sf.mcf2pdf.mcfelements.util.webp.Qt5WebpLib;
+import net.sf.mcf2pdf.mcfelements.util.webp.Webp;
+import net.sf.mcf2pdf.mcfelements.util.webp.WebpLib;
 
 /**
  * Utility class for working with images in the context of the mcf2pdf project.
@@ -61,7 +61,7 @@ public final class ImageUtil {
 
 	public static final double SQRT_2 = Math.sqrt(2);
 
-	private static Qt5WebpLib qt5Library;
+	private static WebpLib qt5Library;
 
 	private ImageUtil() {
 	}
@@ -264,10 +264,10 @@ public final class ImageUtil {
 		// special treatment for webp files
 		if (f.getName().toLowerCase(Locale.US).endsWith(".webp")) {
 			if (qt5Library == null) {
-				qt5Library = Qt5Webp.loadLibrary();
+				qt5Library = Webp.loadLibrary();
 			}
 
-			return Qt5Webp.loadWebPImage(f, qt5Library);
+			return Webp.loadWebPImage(f, qt5Library);
 		}
 
 		return ImageIO.read(f);

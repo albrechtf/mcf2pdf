@@ -5,13 +5,13 @@ import com.sun.jna.Pointer;
 
 /**
  * JNA interface with all required methods to be dynamically linked and accessed
- * from the shared Qt5 library for WebP access. Derived from <a href=
+ * from the shared WebP library. Derived from <a href=
  * "https://code.woboq.org/qt5/qtimageformats/src/3rdparty/libwebp/src/webp/decode.h.html">https://code.woboq.org/qt5/qtimageformats/src/3rdparty/libwebp/src/webp/decode.h.html</a>
  *
  * @author Florian Albrecht
  *
  */
-public interface Qt5WebpLib extends Library {
+public interface WebpLib extends Library {
 
 	int WebPGetInfo(byte[] data, int data_size, int[] width, int[] height);
 
